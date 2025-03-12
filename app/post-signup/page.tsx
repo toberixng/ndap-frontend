@@ -1,5 +1,5 @@
 // app/post-signup/page.tsx
-"use client"; // Required for Clerk's useUser hook
+"use client";
 
 import { useUser } from "@clerk/nextjs";
 import { useEffect } from "react";
@@ -13,8 +13,8 @@ export default function PostSignUpPage() {
   useEffect(() => {
     if (user) {
       const generateMID = () => {
-        const randomString = Math.random().toString(36).substr(2, 5).toUpperCase();
-        return `MID-${randomString}`; // e.g., MID-ABC12
+        const randomNumber = Math.floor(10000 + Math.random() * 90000); // Generates a 5-digit number (10000-99999)
+        return `MID-${randomNumber}`; // e.g., MID-12345
       };
 
       const mid = generateMID();
@@ -26,7 +26,7 @@ export default function PostSignUpPage() {
           .from("users")
           .insert({
             id: user.id, // Clerk user ID (UUID)
-            username: mid, // MID-XXXXX
+            username: mid, // MID-XXXXX (numeric)
             email: email,
           });
 
