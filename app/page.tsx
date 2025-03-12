@@ -1,11 +1,38 @@
 // app/page.tsx
+"use client"; // Add this at the top
+
+import { UserButton, useUser } from "@clerk/nextjs";
+
 export default function Home() {
+  const { isSignedIn, user } = useUser();
+
   return (
-    <div>
-      <h1 className="text-3xl text-blue-500">Hello World</h1>
+    <div className="p-4">
+      <h1 className="text-3xl text-blue-500">Welcome to NDAP</h1>
+      {isSignedIn ? (
+        <div>
+          <p>Hello, {user?.emailAddresses[0].emailAddress}!</p>
+          <UserButton afterSignOutUrl="/" />
+        </div>
+      ) : (
+        <p>
+          Please <a href="/login" className="text-blue-500">log in</a> or{" "}
+          <a href="/register" className="text-blue-500">register</a>.
+        </p>
+      )}
     </div>
   );
 }
+
+
+// // app/page.tsx
+// export default function Home() {
+//   return (
+//     <div>
+//       <h1 className="text-3xl text-blue-500">Hello World</h1>
+//     </div>
+//   );
+// }
 
 
 // import Image from "next/image";
