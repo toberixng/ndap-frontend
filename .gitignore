@@ -43,3 +43,5 @@ next-env.d.ts
 # .gitignore
 .env.local
 node_modules
+
+.vercel
