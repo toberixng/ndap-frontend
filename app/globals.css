@@ -1,7 +1,6 @@
 /* app/globals.css */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss/preflight"; /* Replaces @tailwind base */
+@import "tailwindcss"; /* Includes all utilities */
 
 /* @import "tailwindcss";
 

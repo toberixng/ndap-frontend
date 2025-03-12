@@ -1,11 +1,14 @@
-// middleware.ts (in project root)
+// middleware.ts
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
 const isPublicRoute = createRouteMatcher(["/", "/register", "/login"]);
 
-export default clerkMiddleware((auth, request) => {
-  if (!isPublicRoute(request)) {
-    auth().protect(); // Protects all routes except public ones
+export default clerkMiddleware(async (auth, request) => {
+  const authObject = await auth(); // Await the Promise to get ClerkMiddlewareAuthObject
+  const { userId } = authObject;
+
+  if (!isPublicRoute(request) && !userId) {
+    return Response.redirect(new URL("/login", request.url));
   }
 });
 
