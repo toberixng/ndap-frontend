@@ -54,7 +54,7 @@ export default function Section({
                 <textarea
                   value={Array.isArray(value) ? value.join(", ") : value}
                   onChange={(e) => handleEditChange(packageKey, key, e.target.value.split(", "))}
-                  className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 transition-all"
                 />
               </div>
             ) : key === "placeOfBirth" ? (
@@ -64,14 +64,14 @@ export default function Section({
                   type="text"
                   value={value.state}
                   onChange={(e) => handleEditChange(packageKey, key, { ...value, state: e.target.value })}
-                  className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 transition-all"
                 />
                 <label className="block text-gray-700 font-medium mt-2">LGA:</label>
                 <input
                   type="text"
                   value={value.lga}
                   onChange={(e) => handleEditChange(packageKey, key, { ...value, lga: e.target.value })}
-                  className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 transition-all"
                 />
               </div>
             ) : (
@@ -81,7 +81,7 @@ export default function Section({
                   type="text"
                   value={value}
                   onChange={(e) => handleEditChange(packageKey, key, e.target.value)}
-                  className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 transition-all"
                 />
               </div>
             )

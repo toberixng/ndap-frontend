@@ -16,7 +16,7 @@ export default function Header({ title, dateRange, profileImage }: HeaderProps) 
         <img
           src={profileImage}
           alt="Profile"
-          className="w-12 h-12 rounded-full border-2 border-gray-300 hover:border-green-500 transition-all duration-300"
+          className="w-12 h-12 rounded-full border-2 border-gray-300 hover:border-green-500 transition-all duration-300 cursor-pointer"
         />
       </div>
     </div>

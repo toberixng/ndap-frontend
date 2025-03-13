@@ -22,9 +22,9 @@ export default function CrimeHistoryChart({ offenses }: CrimeHistoryChartProps) 
     datasets: [
       {
         label: "Offenses",
-        data: offenses.map(() => 1), // Count of offenses (static as 1 per offense)
-        backgroundColor: "rgba(255, 99, 132, 0.6)",
-        borderColor: "rgba(255, 99, 132, 1)",
+        data: offenses.map(() => 1), // Static count of 1 per offense
+        backgroundColor: "rgba(14, 165, 233, 0.6)", // Blue shade
+        borderColor: "rgba(14, 165, 233, 1)",
         borderWidth: 1,
       },
     ],
@@ -35,10 +35,10 @@ export default function CrimeHistoryChart({ offenses }: CrimeHistoryChartProps) 
     maintainAspectRatio: false,
     plugins: {
       legend: { display: false },
-      title: { display: true, text: "Crime History Timeline" },
+      title: { display: true, text: "Crime History Timeline", font: { size: 14 } },
     },
     scales: {
-      y: { beginAtZero: true, title: { display: true, text: "Count" } },
+      y: { beginAtZero: true, ticks: { stepSize: 1 }, title: { display: true, text: "Count" } },
       x: { title: { display: true, text: "Date" } },
     },
   };

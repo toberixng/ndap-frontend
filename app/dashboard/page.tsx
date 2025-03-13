@@ -166,7 +166,7 @@ export default function DashboardPage() {
   const { username: mid, mock_data: mockData, edit_approvals: approvals } = userData;
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 p-6">
       <div className="max-w-6xl mx-auto bg-white rounded-xl shadow-lg p-6">
         <Header
           title="Your NDAP Dashboard"
@@ -258,33 +258,33 @@ export default function DashboardPage() {
             <p className="mb-4 text-gray-600">Amount: ₦{packages[showPaymentPopup].price}</p>
             <div className="space-y-4">
               <div>
-                <label className="block text-gray-700">Card Number:</label>
+                <label className="block text-gray-700 font-medium">Card Number:</label>
                 <input
                   type="text"
                   value={cardDetails.number}
                   onChange={(e) => setCardDetails({ ...cardDetails, number: e.target.value })}
                   placeholder="1234-5678-9012-3456"
-                  className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 transition-all"
                 />
               </div>
               <div>
-                <label className="block text-gray-700">CVV:</label>
+                <label className="block text-gray-700 font-medium">CVV:</label>
                 <input
                   type="text"
                   value={cardDetails.cvv}
                   onChange={(e) => setCardDetails({ ...cardDetails, cvv: e.target.value })}
                   placeholder="123"
-                  className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 transition-all"
                 />
               </div>
               <div>
-                <label className="block text-gray-700">Expiry (MM/YY):</label>
+                <label className="block text-gray-700 font-medium">Expiry (MM/YY):</label>
                 <input
                   type="text"
                   value={cardDetails.expiry}
                   onChange={(e) => setCardDetails({ ...cardDetails, expiry: e.target.value })}
                   placeholder="12/25"
-                  className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 transition-all"
                 />
               </div>
             </div>
