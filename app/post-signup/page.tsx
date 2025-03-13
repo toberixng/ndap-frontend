@@ -4,14 +4,16 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import supabase from "../../lib/supabase";
+import { generateMockData } from "../../lib/mockDataGenerator";
 
 export default function PostSignUpPage() {
   const [mid, setMid] = useState<string | null>(null);
+  const [mockData, setMockData] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
   useEffect(() => {
-    const fetchUserAndMID = async () => {
+    const fetchUserAndUpdate = async () => {
       const { data: { user }, error: authError } = await supabase.auth.getUser();
 
       if (authError || !user) {
@@ -19,21 +21,33 @@ export default function PostSignUpPage() {
         return;
       }
 
-      // Fetch MID from users table
-      const { data, error: fetchError } = await supabase
+      const { data: userData, error: fetchError } = await supabase
         .from("users")
         .select("username")
         .eq("id", user.id)
         .single();
 
-      if (fetchError || !data) {
+      if (fetchError || !userData) {
         setError("Failed to retrieve your MID: " + (fetchError?.message || "No data found"));
+        return;
+      }
+
+      setMid(userData.username);
+
+      const mock = generateMockData(user.email);
+      const { error: updateError } = await supabase
+        .from("users")
+        .update({ mock_data: mock })
+        .eq("id", user.id);
+
+      if (updateError) {
+        setError("Failed to store mock data: " + updateError.message);
       } else {
-        setMid(data.username); // Display the stored MID
+        setMockData(mock);
       }
     };
 
-    fetchUserAndMID();
+    fetchUserAndUpdate();
   }, []);
 
   const handleProceed = () => {
@@ -42,16 +56,64 @@ export default function PostSignUpPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-lg">
         <h1 className="text-2xl font-bold text-center mb-6">Your Account is Ready!</h1>
-        {mid ? (
-          <div className="text-center space-y-4">
-            <p>
-              Your unique MID is: <span className="font-bold text-xl">{mid}</span>
-            </p>
-            <p className="text-sm text-gray-600">
-              Please save this MID securely. You’ll need it to log in and access your data later.
-            </p>
+        {mid && mockData ? (
+          <div className="space-y-6">
+            <div className="text-center">
+              <p>
+                Your unique MID is: <span className="font-bold text-xl">{mid}</span>
+              </p>
+              <p className="text-sm text-gray-600">
+                Save this MID securely. You’ll need it to log in and access your data.
+              </p>
+            </div>
+            <div className="text-left space-y-4">
+              <h2 className="text-lg font-semibold">Personal Information</h2>
+              <p>Full Name: {mockData.personalInformation.fullName}</p>
+              <p>Date of Birth: {mockData.personalInformation.dateOfBirth}</p>
+              <p>Gender: {mockData.personalInformation.gender}</p>
+              <p>
+                Place of Birth: {mockData.personalInformation.placeOfBirth.state}, {mockData.personalInformation.placeOfBirth.lga}
+              </p>
+              <p>Nationality: {mockData.personalInformation.nationality}</p>
+              <p>Marital Status: {mockData.personalInformation.maritalStatus}</p>
+
+              <h2 className="text-lg font-semibold">Contact & Address Information</h2>
+              {mockData.contactAndAddressInformation.residentialAddresses.map((addr: any, i: number) => (
+                <p key={i}>
+                  Address {i + 1}: {addr.address}, {addr.state}, {addr.lga}
+                </p>
+              ))}
+              <p>Phone Numbers: {mockData.contactAndAddressInformation.phoneNumbers.join(", ")}</p>
+              {mockData.contactAndAddressInformation.emailAddress && (
+                <p>Email: {mockData.contactAndAddressInformation.emailAddress}</p>
+              )}
+
+              <h2 className="text-lg font-semibold">Government & Identification</h2>
+              <p>NIN: {mockData.governmentAndIdentificationInformation.nin}</p>
+              <p>BVN: {mockData.governmentAndIdentificationInformation.bvn}</p>
+              <p>Voter’s Card: {mockData.governmentAndIdentificationInformation.votersCardNumber}</p>
+              <p>Passport: {mockData.governmentAndIdentificationInformation.passportNumber}</p>
+              <p>Driver’s License: {mockData.governmentAndIdentificationInformation.driversLicenseNumber}</p>
+              <p>TIN: {mockData.governmentAndIdentificationInformation.taxIdentificationNumber}</p>
+
+              <h2 className="text-lg font-semibold">Crime History</h2>
+              <p>Has Criminal Record: {mockData.crimeHistory.hasCriminalRecord ? "Yes" : "No"}</p>
+              {mockData.crimeHistory.offenses && (
+                <ul className="list-disc pl-5">
+                  {mockData.crimeHistory.offenses.map((offense: any, i: number) => (
+                    <li key={i}>
+                      {offense.date}: {offense.description}
+                    </li>
+                  ))}
+                </ul>
+              )}
+
+              <h2 className="text-lg font-semibold">Behavioral Analysis</h2>
+              <p>Risk Level: {mockData.behavioralAnalysis.riskLevel}</p>
+              <p>Traits: {mockData.behavioralAnalysis.traits.join(", ")}</p>
+            </div>
             <button
               onClick={handleProceed}
               className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600"
@@ -62,7 +124,7 @@ export default function PostSignUpPage() {
         ) : error ? (
           <p className="text-red-500 text-center">{error}</p>
         ) : (
-          <p className="text-center">Fetching your MID...</p>
+          <p className="text-center">Setting up your account...</p>
         )}
       </div>
     </div>
